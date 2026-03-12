@@ -1,0 +1,6 @@
+openai
+duckduckgo-search
+httpx
+beautifulsoup4
+python-dotenv
+rich
