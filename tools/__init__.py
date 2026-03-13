@@ -1,5 +1,4 @@
-from tools.search import SearchTool
-from tools.browse import BrowseTool
 from tools.calculator import CalculatorTool
+from tools.search import SearchTool
 
-ALL_TOOLS = [SearchTool(), BrowseTool(), CalculatorTool()]
+CUSTOM_TOOLS = [SearchTool(), CalculatorTool()]

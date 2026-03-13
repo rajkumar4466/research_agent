@@ -1,6 +1,5 @@
 openai
-duckduckgo-search
-httpx
-beautifulsoup4
+mcp[cli]
+ddgs
 python-dotenv
 rich
