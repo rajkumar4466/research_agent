@@ -1,9 +1,10 @@
+"""Custom calculator tool with safe math evaluation (no eval())."""
+
 import ast
 import operator
 
-from tools.base import Tool
+from crewai.tools import tool
 
-# Safe operators for math evaluation
 SAFE_OPERATORS = {
     ast.Add: operator.add,
     ast.Sub: operator.sub,
@@ -29,9 +30,7 @@ def safe_eval(expr: str) -> float:
             op_type = type(node.op)
             if op_type not in SAFE_OPERATORS:
                 raise ValueError(f"Unsupported operator: {op_type.__name__}")
-            left = _eval(node.left)
-            right = _eval(node.right)
-            return SAFE_OPERATORS[op_type](left, right)
+            return SAFE_OPERATORS[op_type](_eval(node.left), _eval(node.right))
         elif isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
             return -_eval(node.operand)
         else:
@@ -40,28 +39,15 @@ def safe_eval(expr: str) -> float:
     return _eval(tree)
 
 
-class CalculatorTool(Tool):
-    name = "calculator"
-    description = (
-        "Evaluate a mathematical expression. Supports +, -, *, /, //, %, **. "
-        "Use this for any numeric calculations needed during research."
-    )
-    parameters = {
-        "type": "object",
-        "properties": {
-            "expression": {
-                "type": "string",
-                "description": "The math expression to evaluate, e.g. '(10000 * 0.08) / 12'.",
-            },
-        },
-        "required": ["expression"],
-    }
-
-    def run(self, expression: str) -> str:
-        try:
-            result = safe_eval(expression)
-            return f"{expression} = {result}"
-        except ZeroDivisionError:
-            return "Error: Division by zero."
-        except Exception as e:
-            return f"Error evaluating '{expression}': {e}"
+@tool("calculator")
+def calculator(expression: str) -> str:
+    """Evaluate a mathematical expression. Supports +, -, *, /, //, %, **.
+    Use this for any numeric calculations needed during research.
+    Example: '(10000 * 0.08) / 12'"""
+    try:
+        result = safe_eval(expression)
+        return f"{expression} = {result}"
+    except ZeroDivisionError:
+        return "Error: Division by zero."
+    except Exception as e:
+        return f"Error evaluating '{expression}': {e}"

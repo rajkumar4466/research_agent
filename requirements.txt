@@ -1,5 +1,4 @@
-openai
-mcp[cli]
+crewai
+crewai-tools
 ddgs
 python-dotenv
-rich

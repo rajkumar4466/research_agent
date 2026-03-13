@@ -1,4 +1,4 @@
-from tools.calculator import CalculatorTool
-from tools.search import SearchTool
+from tools.search import web_search
+from tools.calculator import calculator
 
-CUSTOM_TOOLS = [SearchTool(), CalculatorTool()]
+CUSTOM_TOOLS = [web_search, calculator]
